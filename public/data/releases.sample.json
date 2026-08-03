@@ -1,0 +1,151 @@
+{
+  "lastSyncedAt": "2026-08-03T09:00:00Z",
+  "releases": [
+    {
+      "id": "company-a_10201",
+      "name": "v2.4.0 - Payment Revamp",
+      "description": "Complete overhaul of payment processing pipeline with support for new providers",
+      "company": "company-a",
+      "companyName": "Company A",
+      "project": "PROJ1",
+      "status": "upcoming",
+      "releaseDate": "2026-08-15",
+      "releasedAt": null,
+      "source": {
+        "instanceId": "company-a",
+        "versionId": "10201",
+        "versionUrl": "https://company-a.atlassian.net/projects/PROJ1/versions/10201",
+        "projectKey": "PROJ1"
+      },
+      "assets": {
+        "preReleaseNotes": {
+          "url": "https://docs.google.com/document/d/1aBcDeFgHiJkLmNoPqRsTuVwXyZ/edit",
+          "docId": "1aBcDeFgHiJkLmNoPqRsTuVwXyZ",
+          "title": "v2.4.0 Payment Revamp - Pre-Release Notes"
+        },
+        "presentation": {
+          "url": "https://docs.google.com/presentation/d/1xYzAbCdEfGhIjKlMnOpQrStUvWx/edit",
+          "presentationId": "1xYzAbCdEfGhIjKlMnOpQrStUvWx",
+          "title": "v2.4.0 Payment Revamp - Release Presentation"
+        },
+        "additionalLinks": []
+      },
+      "issues": [
+        { "key": "PROJ1-450", "summary": "Integrate Stripe v3 API", "type": "feature", "priority": "critical", "status": "In Review", "url": "https://company-a.atlassian.net/browse/PROJ1-450" },
+        { "key": "PROJ1-451", "summary": "Add retry logic for failed transactions", "type": "improvement", "priority": "high", "status": "In Progress", "url": "https://company-a.atlassian.net/browse/PROJ1-451" },
+        { "key": "PROJ1-455", "summary": "Fix currency rounding on refunds", "type": "bug", "priority": "high", "status": "Done", "url": "https://company-a.atlassian.net/browse/PROJ1-455" }
+      ],
+      "highlights": ["New Stripe v3 integration with multi-currency support", "Automatic retry for failed transactions (up to 3 attempts)", "Fixed critical rounding bug affecting refunds"],
+      "tags": ["major", "payments"]
+    },
+    {
+      "id": "company-b_20105",
+      "name": "v1.8.0 - SSO Integration",
+      "description": "Enterprise SSO support with SAML and OIDC providers",
+      "company": "company-b",
+      "companyName": "Company B",
+      "project": "MAIN",
+      "status": "upcoming",
+      "releaseDate": "2026-08-22",
+      "releasedAt": null,
+      "source": {
+        "instanceId": "company-b",
+        "versionId": "20105",
+        "versionUrl": "https://company-b.atlassian.net/projects/MAIN/versions/20105",
+        "projectKey": "MAIN"
+      },
+      "assets": {
+        "preReleaseNotes": {
+          "url": "https://docs.google.com/document/d/2bCdEfGhIjKlMnOpQrStUvWxYzA/edit",
+          "docId": "2bCdEfGhIjKlMnOpQrStUvWxYzA",
+          "title": "v1.8.0 SSO Integration - Pre-Release Notes"
+        },
+        "presentation": null,
+        "additionalLinks": [
+          { "url": "https://www.loom.com/share/example-sso-demo", "label": "SSO Demo Recording", "type": "video" }
+        ]
+      },
+      "issues": [
+        { "key": "MAIN-312", "summary": "SAML 2.0 identity provider support", "type": "feature", "priority": "critical", "status": "Done", "url": "https://company-b.atlassian.net/browse/MAIN-312" },
+        { "key": "MAIN-313", "summary": "OIDC provider configuration UI", "type": "feature", "priority": "high", "status": "In Progress", "url": "https://company-b.atlassian.net/browse/MAIN-313" }
+      ],
+      "highlights": ["Enterprise SSO with SAML 2.0 and OIDC support", "Admin UI for configuring identity providers"],
+      "tags": ["major", "security", "enterprise"]
+    },
+    {
+      "id": "company-a_10198",
+      "name": "v2.3.1 - Hotfix Bundle",
+      "description": "Critical bug fixes for dashboard and reporting module",
+      "company": "company-a",
+      "companyName": "Company A",
+      "project": "PROJ1",
+      "status": "published",
+      "releaseDate": "2026-07-20",
+      "releasedAt": "2026-07-20T14:00:00Z",
+      "source": {
+        "instanceId": "company-a",
+        "versionId": "10198",
+        "versionUrl": "https://company-a.atlassian.net/projects/PROJ1/versions/10198",
+        "projectKey": "PROJ1"
+      },
+      "assets": {
+        "preReleaseNotes": {
+          "url": "https://docs.google.com/document/d/3cDeFgHiJkLmNoPqRsTuVwXyZaB/edit",
+          "docId": "3cDeFgHiJkLmNoPqRsTuVwXyZaB",
+          "title": "v2.3.1 Hotfix Bundle - Release Notes"
+        },
+        "presentation": {
+          "url": "https://docs.google.com/presentation/d/3yZaBcDeFgHiJkLmNoPqRsTuVwX/edit",
+          "presentationId": "3yZaBcDeFgHiJkLmNoPqRsTuVwX",
+          "title": "v2.3.1 Hotfix Bundle - Overview"
+        },
+        "additionalLinks": []
+      },
+      "issues": [
+        { "key": "PROJ1-440", "summary": "Dashboard widgets not loading for enterprise accounts", "type": "bug", "priority": "critical", "status": "Done", "url": "https://company-a.atlassian.net/browse/PROJ1-440" },
+        { "key": "PROJ1-442", "summary": "CSV export timeout on large datasets", "type": "bug", "priority": "high", "status": "Done", "url": "https://company-a.atlassian.net/browse/PROJ1-442" }
+      ],
+      "highlights": ["Fixed dashboard widget loading for enterprise accounts", "Resolved CSV export timeout on datasets > 100k rows"],
+      "tags": ["hotfix"]
+    },
+    {
+      "id": "company-b_20100",
+      "name": "v1.7.0 - Analytics Overhaul",
+      "description": "New analytics engine with real-time dashboards and custom report builder",
+      "company": "company-b",
+      "companyName": "Company B",
+      "project": "MAIN",
+      "status": "published",
+      "releaseDate": "2026-07-10",
+      "releasedAt": "2026-07-10T16:30:00Z",
+      "source": {
+        "instanceId": "company-b",
+        "versionId": "20100",
+        "versionUrl": "https://company-b.atlassian.net/projects/MAIN/versions/20100",
+        "projectKey": "MAIN"
+      },
+      "assets": {
+        "preReleaseNotes": {
+          "url": "https://docs.google.com/document/d/4dEfGhIjKlMnOpQrStUvWxYzAbC/edit",
+          "docId": "4dEfGhIjKlMnOpQrStUvWxYzAbC",
+          "title": "v1.7.0 Analytics Overhaul - Release Notes"
+        },
+        "presentation": {
+          "url": "https://docs.google.com/presentation/d/4zAbCdEfGhIjKlMnOpQrStUvWxY/edit",
+          "presentationId": "4zAbCdEfGhIjKlMnOpQrStUvWxY",
+          "title": "v1.7.0 Analytics Overhaul - Stakeholder Presentation"
+        },
+        "additionalLinks": [
+          { "url": "https://blog.company-b.com/analytics-overhaul", "label": "Blog Announcement", "type": "blog" }
+        ]
+      },
+      "issues": [
+        { "key": "MAIN-280", "summary": "Real-time event streaming pipeline", "type": "feature", "priority": "critical", "status": "Done", "url": "https://company-b.atlassian.net/browse/MAIN-280" },
+        { "key": "MAIN-285", "summary": "Custom report builder with drag-and-drop", "type": "feature", "priority": "high", "status": "Done", "url": "https://company-b.atlassian.net/browse/MAIN-285" },
+        { "key": "MAIN-290", "summary": "Dashboard widget performance optimization", "type": "improvement", "priority": "medium", "status": "Done", "url": "https://company-b.atlassian.net/browse/MAIN-290" }
+      ],
+      "highlights": ["Real-time analytics with sub-second event processing", "Custom report builder with drag-and-drop interface", "3x performance improvement on dashboard widgets"],
+      "tags": ["major", "analytics"]
+    }
+  ]
+}

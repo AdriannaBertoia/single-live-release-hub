@@ -1,0 +1,41 @@
+{
+  "company-a_10201": {
+    "preReleaseNotes": {
+      "url": "https://docs.google.com/document/d/1aBcDeFgHiJkLmNoPqRsTuVwXyZ/edit",
+      "docId": "1aBcDeFgHiJkLmNoPqRsTuVwXyZ",
+      "title": "v2.4.0 Payment Revamp - Pre-Release Notes"
+    },
+    "presentation": {
+      "url": "https://docs.google.com/presentation/d/1xYzAbCdEfGhIjKlMnOpQrStUvWx/edit",
+      "presentationId": "1xYzAbCdEfGhIjKlMnOpQrStUvWx",
+      "title": "v2.4.0 Payment Revamp - Release Presentation"
+    },
+    "additionalLinks": [],
+    "highlights": [
+      "New Stripe v3 integration with multi-currency support",
+      "Automatic retry for failed transactions (up to 3 attempts)",
+      "Fixed critical rounding bug affecting refunds"
+    ],
+    "tags": ["major", "payments"]
+  },
+  "company-b_20105": {
+    "preReleaseNotes": {
+      "url": "https://docs.google.com/document/d/2bCdEfGhIjKlMnOpQrStUvWxYzA/edit",
+      "docId": "2bCdEfGhIjKlMnOpQrStUvWxYzA",
+      "title": "v1.8.0 SSO Integration - Pre-Release Notes"
+    },
+    "presentation": null,
+    "additionalLinks": [
+      {
+        "url": "https://www.loom.com/share/example-sso-demo",
+        "label": "SSO Demo Recording",
+        "type": "video"
+      }
+    ],
+    "highlights": [
+      "Enterprise SSO with SAML 2.0 and OIDC support",
+      "Admin UI for configuring identity providers"
+    ],
+    "tags": ["major", "security", "enterprise"]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "auth": {
+    "email": "${JIRA_EMAIL}",
+    "apiToken": "${JIRA_API_TOKEN}"
+  },
+  "instances": [
+    {
+      "id": "LAZ",
+      "name": "Learning A-Z",
+      "baseUrl": "https://learningaz.atlassian.net/",
+      "projects": "all",
+      "releaseFilter": {
+        "useFixVersions": true,
+        "additionalJql": ""
+      }
+    },
+    {
+      "id": "EL",
+      "name": "Explore Learning",
+      "baseUrl": "https://explorelearning.atlassian.net/",
+      "projects": "all",
+      "releaseFilter": {
+        "useFixVersions": true,
+        "additionalJql": ""
+      }
+    }
+  ],
+  "sync": {
+    "intervalMinutes": 60,
+    "publishedMonthsBack": 6,
+    "outputPath": "./data/releases.json"
+  }
+}

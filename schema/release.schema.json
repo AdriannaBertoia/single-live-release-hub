@@ -1,0 +1,205 @@
+{
+  "title": "Release Hub Data",
+  "description": "Schema for the unified release data pulled from multiple Jira instances with linked Google Docs and Slides",
+  "type": "object",
+  "required": ["lastSyncedAt", "releases"],
+  "properties": {
+    "lastSyncedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the last successful sync"
+    },
+    "releases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "company", "status", "source"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier: {company-id}_{jira-version-id}"
+          },
+          "name": {
+            "type": "string",
+            "description": "Release version name from Jira Fix Version"
+          },
+          "description": {
+            "type": "string",
+            "description": "Release description from Jira Fix Version"
+          },
+          "company": {
+            "type": "string",
+            "description": "Company identifier matching config instance id"
+          },
+          "companyName": {
+            "type": "string",
+            "description": "Human-readable company name"
+          },
+          "project": {
+            "type": "string",
+            "description": "Jira project key this version belongs to"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["upcoming", "published"],
+            "description": "upcoming = unreleased Fix Version, published = released Fix Version"
+          },
+          "releaseDate": {
+            "type": ["string", "null"],
+            "format": "date",
+            "description": "Planned or actual release date (YYYY-MM-DD)"
+          },
+          "releasedAt": {
+            "type": ["string", "null"],
+            "format": "date-time",
+            "description": "Actual release timestamp (set when status becomes published)"
+          },
+          "source": {
+            "type": "object",
+            "required": ["instanceId", "versionId"],
+            "properties": {
+              "instanceId": {
+                "type": "string",
+                "description": "Matches the id in jira.config.json"
+              },
+              "versionId": {
+                "type": "string",
+                "description": "Jira version ID"
+              },
+              "versionUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Direct link to the Fix Version in Jira"
+              },
+              "projectKey": {
+                "type": "string"
+              }
+            }
+          },
+          "assets": {
+            "type": "object",
+            "properties": {
+              "preReleaseNotes": {
+                "type": "object",
+                "required": ["url"],
+                "description": "Pre-release notes Google Doc",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Full Google Docs URL"
+                  },
+                  "docId": {
+                    "type": "string",
+                    "description": "Extracted Google Doc ID for embedding"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Document title"
+                  },
+                  "lastModified": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                  }
+                }
+              },
+              "presentation": {
+                "type": "object",
+                "required": ["url"],
+                "description": "Release presentation Google Slides",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Full Google Slides URL"
+                  },
+                  "presentationId": {
+                    "type": "string",
+                    "description": "Extracted Slides ID for embedding"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Presentation title"
+                  },
+                  "lastModified": {
+                    "type": ["string", "null"],
+                    "format": "date-time"
+                  }
+                }
+              },
+              "additionalLinks": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["url", "label"],
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["video", "blog", "documentation", "other"]
+                    }
+                  }
+                },
+                "description": "Any other relevant links (videos, blog posts, etc.)"
+              }
+            }
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["key", "summary", "type"],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "Jira issue key (e.g., PROJ-123)"
+                },
+                "summary": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["feature", "bug", "improvement", "task", "other"],
+                  "description": "Normalized issue type"
+                },
+                "priority": {
+                  "type": "string",
+                  "enum": ["critical", "high", "medium", "low"]
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Current Jira status"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            },
+            "description": "Issues associated with this Fix Version"
+          },
+          "highlights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Key highlights for the executive digest"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags for filtering (e.g., major, security, infrastructure)"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+name: Sync Releases & Deploy
+
+on:
+  # Run weekly on Monday mornings at 8am UTC
+  schedule:
+    - cron: '0 8 * * 1'
+
+  # Also allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+  # Deploy on push to main (e.g., when you update config or templates)
+  push:
+    branches: [main]
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync from Jira
+        env:
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: node src/jira-sync.js
+
+      - name: Copy data to public folder
+        run: cp data/releases.json public/data/releases.json
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4

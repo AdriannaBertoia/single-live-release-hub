@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Release Hub</title>
+  <style>
+    :root {
+      --color-bg: #f8f9fa;
+      --color-surface: #ffffff;
+      --color-border: #e2e8f0;
+      --color-text: #1a202c;
+      --color-text-muted: #64748b;
+      --color-upcoming: #3b82f6;
+      --color-published: #10b981;
+      --color-company-a: #6366f1;
+      --color-company-b: #f59e0b;
+      --color-tag: #e2e8f0;
+      --color-feature: #dbeafe;
+      --color-bug: #fee2e2;
+      --color-improvement: #d1fae5;
+      --color-task: #f3e8ff;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+
+    .header {
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .sync-info {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .filter-btn {
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      background: var(--color-surface);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover { border-color: var(--color-upcoming); }
+    .filter-btn.active {
+      background: var(--color-upcoming);
+      color: white;
+      border-color: var(--color-upcoming);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .section-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .badge-upcoming { background: var(--color-upcoming); }
+    .badge-published { background: var(--color-published); }
+
+    .release-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .release-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s;
+    }
+
+    .release-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .release-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .release-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .release-title a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .release-title a:hover { text-decoration: underline; }
+
+    .company-badge {
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .company-badge[data-company="EL"] { background: var(--color-company-a); }
+    .company-badge[data-company="LAZ"] { background: var(--color-company-b); }
+
+    .release-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .release-description {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .release-highlights {
+      margin-bottom: 1rem;
+    }
+
+    .release-highlights ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .release-highlights li {
+      padding: 0.25rem 0;
+      font-size: 0.85rem;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .release-highlights li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--color-upcoming);
+    }
+
+    .release-assets {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .asset-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: var(--radius);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .asset-link:hover { opacity: 0.8; }
+
+    .asset-link-doc {
+      background: #e8f0fe;
+      color: #1a73e8;
+    }
+
+    .asset-link-slides {
+      background: #fef3e0;
+      color: #e37400;
+    }
+
+    .asset-link-video {
+      background: #fce4ec;
+      color: #d32f2f;
+    }
+
+    .asset-link-other {
+      background: var(--color-tag);
+      color: var(--color-text);
+    }
+
+    .release-issues {
+      border-top: 1px solid var(--color-border);
+      padding-top: 0.75rem;
+    }
+
+    .issues-toggle {
+      background: none;
+      border: none;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      padding: 0.25rem 0;
+    }
+
+    .issues-toggle:hover { color: var(--color-text); }
+
+    .issues-list {
+      display: none;
+      margin-top: 0.5rem;
+    }
+
+    .issues-list.open { display: block; }
+
+    .issue-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0;
+      font-size: 0.8rem;
+    }
+
+    .issue-type {
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .issue-type-feature { background: var(--color-feature); color: #1e40af; }
+    .issue-type-bug { background: var(--color-bug); color: #991b1b; }
+    .issue-type-improvement { background: var(--color-improvement); color: #065f46; }
+    .issue-type-task { background: var(--color-task); color: #5b21b6; }
+    .issue-type-other { background: var(--color-tag); color: var(--color-text); }
+
+    .issue-key {
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--color-upcoming);
+      text-decoration: none;
+    }
+
+    .issue-key:hover { text-decoration: underline; }
+
+    .tags {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      background: var(--color-tag);
+      color: var(--color-text-muted);
+    }
+
+    /* Embed modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      width: 90vw;
+      height: 80vh;
+      max-width: 1000px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .modal-header h3 { font-size: 1rem; }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--color-text-muted);
+    }
+
+    .modal-body {
+      flex: 1;
+      padding: 0;
+    }
+
+    .modal-body iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--color-text-muted);
+    }
+
+    .month-group {
+      margin-bottom: 2rem;
+    }
+
+    .month-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .month-count {
+      font-weight: 400;
+      color: var(--color-text-muted);
+      font-size: 0.85rem;
+    }
+
+    .project-group {
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .project-group:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .project-group-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+      padding: 0.3rem 0;
+    }
+
+    .spotlight-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .spotlight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .spotlight-card {
+      background: var(--color-surface);
+      border: 2px solid var(--color-upcoming);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+    }
+
+    .spotlight-card .release-title {
+      font-size: 1.15rem;
+    }
+
+    .spotlight-label {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .spotlight-label-current {
+      background: var(--color-upcoming);
+      color: white;
+    }
+
+    .spotlight-label-next {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .company-section {
+      margin-bottom: 0.75rem;
+    }
+
+    .company-section-header {
+      margin-bottom: 0.4rem;
+      padding: 0.2rem 0;
+    }
+
+    .company-tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin: 0.75rem 0;
+      padding: 0.25rem;
+      background: var(--color-bg);
+      border-radius: var(--radius);
+    }
+
+    .company-tab {
+      padding: 0.4rem 0.75rem;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--color-text-muted);
+      transition: all 0.15s;
+    }
+
+    .company-tab:hover {
+      color: var(--color-text);
+    }
+
+    .company-tab.active {
+      background: var(--color-surface);
+      color: var(--color-text);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+
+    .epic-content {
+      margin-top: 0.5rem;
+    }
+
+    .epic-group {
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 0.5rem;
+    }
+
+    .epic-group:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+
+    .epic-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      cursor: pointer;
+    }
+
+    .epic-header:hover {
+      background: var(--color-bg);
+      border-radius: 4px;
+      padding: 0.4rem 0.5rem;
+      margin: 0 -0.5rem;
+    }
+
+    .epic-link {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--color-upcoming);
+      text-decoration: none;
+    }
+
+    .epic-link:hover {
+      text-decoration: underline;
+    }
+
+    .epic-count {
+      font-size: 0.7rem;
+      background: var(--color-tag);
+      color: var(--color-text-muted);
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 1rem; }
+      .header-inner { flex-direction: column; gap: 0.75rem; }
+      .release-card-header { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div>
+        <h1>Release Hub</h1>
+        <span class="sync-info" id="syncInfo">Loading...</span>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="EL">Explore Learning</button>
+        <button class="filter-btn" data-filter="LAZ">Learning A-Z</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section spotlight-section" id="spotlightSection">
+      <div class="section-header">
+        <h2>At a Glance</h2>
+      </div>
+      <div class="spotlight-grid" id="spotlightGrid"></div>
+    </section>
+
+    <section class="section" id="upcomingSection">
+      <div class="section-header">
+        <h2>Upcoming Releases</h2>
+        <span class="section-badge badge-upcoming" id="upcomingCount">0</span>
+      </div>
+      <div class="release-grid" id="upcomingGrid"></div>
+    </section>
+
+    <section class="section" id="publishedSection">
+      <div class="section-header">
+        <h2>Published Releases</h2>
+        <span class="section-badge badge-published" id="publishedCount">0</span>
+      </div>
+      <div class="release-grid" id="publishedGrid"></div>
+    </section>
+  </main>
+
+  <!-- Embed Modal -->
+  <div class="modal-overlay" id="embedModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Document</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    // ---------------------------------------------------------------------------
+    // Data Loading
+    // ---------------------------------------------------------------------------
+
+    let releases = [];
+    let activeFilter = 'all';
+
+    async function loadReleases() {
+      try {
+        let response = await fetch('./data/releases.json');
+        if (!response.ok) {
+          response = await fetch('./data/releases.sample.json');
+        }
+        if (!response.ok) throw new Error('No release data found');
+
+        const data = await response.json();
+        releases = data.releases;
+        document.getElementById('syncInfo').textContent =
+          `Last synced: ${new Date(data.lastSyncedAt).toLocaleString()}`;
+        render();
+      } catch (err) {
+        document.getElementById('syncInfo').textContent = 'Error loading data';
+        console.error('Failed to load releases:', err);
+      }
+    }
+
+    // ---------------------------------------------------------------------------
+    // Rendering
+    // ---------------------------------------------------------------------------
+
+    function render() {
+      const filtered = activeFilter === 'all'
+        ? releases
+        : releases.filter(r => r.company === activeFilter);
+
+      const now = new Date();
+      const fifteenDaysAgo = new Date(now);
+      fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+      const fifteenDaysAhead = new Date(now);
+      fifteenDaysAhead.setDate(fifteenDaysAhead.getDate() + 15);
+
+      // Shipped Recently: published with releaseDate in last 15 days
+      const shippedRecently = filtered.filter(r => {
+        if (r.status !== 'published' || !r.releaseDate) return false;
+        const d = new Date(r.releaseDate + 'T00:00:00');
+        return d >= fifteenDaysAgo && d <= now;
+      });
+
+      // Coming Next: upcoming with releaseDate in next 15 days
+      const comingNext = filtered.filter(r => {
+        if (r.status !== 'upcoming' || !r.releaseDate) return false;
+        const d = new Date(r.releaseDate + 'T00:00:00');
+        return d > now && d <= fifteenDaysAhead;
+      });
+
+      const shippedMonth = buildSpotlight(shippedRecently, 'shipped');
+      const comingMonth = buildSpotlight(comingNext, 'coming');
+
+      // Render spotlight
+      let spotlightHtml = '';
+      if (shippedMonth) {
+        spotlightHtml += renderSpotlightCard(shippedMonth, 'shipped');
+      }
+      if (comingMonth) {
+        spotlightHtml += renderSpotlightCard(comingMonth, 'coming');
+      }
+      document.getElementById('spotlightGrid').innerHTML = spotlightHtml || '<div class="empty-state">Nothing shipped or scheduled in the next 15 days</div>';
+
+      // Remaining upcoming (beyond 15 days) and published (older than 15 days)
+      const allMonths = mergeByMonth(filtered);
+      const upcoming = allMonths.filter(m => {
+        const monthDate = new Date(m.key + '-15');
+        return monthDate > fifteenDaysAhead;
+      });
+      const published = allMonths.filter(m => {
+        const monthDate = new Date(m.key + '-15');
+        return monthDate < fifteenDaysAgo;
+      });
+
+      document.getElementById('upcomingCount').textContent = upcoming.length;
+      document.getElementById('publishedCount').textContent = published.length;
+
+      document.getElementById('upcomingGrid').innerHTML = upcoming.length
+        ? upcoming.map(renderMonthCard).join('')
+        : '<div class="empty-state">No other upcoming releases</div>';
+
+      document.getElementById('publishedGrid').innerHTML = published.length
+        ? published.map(renderMonthCard).join('')
+        : '<div class="empty-state">No published releases</div>';
+    }
+
+    function buildSpotlight(releases, type) {
+      if (releases.length === 0) return null;
+
+      const projects = [];
+      const companies = new Set();
+      let totalIssues = 0;
+
+      for (const release of releases) {
+        if (!release.issues || release.issues.length === 0) continue;
+        companies.add(release.companyName);
+        totalIssues += release.issues.length;
+        projects.push({
+          project: release.project,
+          company: release.company,
+          companyName: release.companyName,
+          issues: release.issues || []
+        });
+      }
+
+      if (projects.length === 0) return null;
+
+      return {
+        key: type,
+        label: type === 'shipped' ? '✅ Shipped Recently' : '🔮 Coming Next',
+        sublabel: type === 'shipped' ? 'Last 15 days' : 'Next 15 days',
+        projects,
+        totalIssues,
+        companies
+      };
+    }
+
+    /**
+     * Merge all releases into one entry per month based on releaseDate
+     */
+    function mergeByMonth(releases) {
+      const groups = {};
+      for (const release of releases) {
+        if (!release.issues || release.issues.length === 0) continue;
+
+        const date = release.releaseDate
+          ? new Date(release.releaseDate + 'T00:00:00')
+          : null;
+        const key = date
+          ? `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+          : '9999-99';
+        const label = date
+          ? `${date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} Release`
+          : 'Unscheduled';
+        if (!groups[key]) {
+          groups[key] = { key, label, projects: [], totalIssues: 0, companies: new Set() };
+        }
+        groups[key].companies.add(release.companyName);
+        groups[key].totalIssues += release.issues.length;
+        groups[key].projects.push({
+          project: release.project,
+          company: release.company,
+          companyName: release.companyName,
+          issues: release.issues || []
+        });
+      }
+      return Object.values(groups).sort((a, b) => b.key.localeCompare(a.key));
+    }
+
+    // ---------------------------------------------------------------------------
+    // Spotlight Cards (This Month / Next Month) with company tabs
+    // ---------------------------------------------------------------------------
+
+    function renderSpotlightCard(month, type) {
+      const id = `spotlight-${month.key}`;
+      const labelClass = type === 'shipped' ? 'spotlight-label-current' : 'spotlight-label-next';
+      const companies = [...month.companies];
+
+      return `
+        <article class="spotlight-card">
+          <span class="spotlight-label ${labelClass}">${month.sublabel}</span>
+          <div class="release-card-header">
+            <div class="release-title">${month.label}</div>
+          </div>
+
+          <div class="release-meta">
+            <span>${month.totalIssues} issues across ${month.projects.length} projects</span>
+          </div>
+
+          <div class="company-tabs" data-card="${id}">
+            <button class="company-tab active" data-card="${id}" data-tab="all" onclick="switchTab(this)">All</button>
+            ${companies.map(c => `
+              <button class="company-tab" data-card="${id}" data-tab="${c}" onclick="switchTab(this)">${c}</button>
+            `).join('')}
+          </div>
+
+          <div class="epic-content" id="${id}-content">
+            ${renderEpicView(month.projects, id, 'all')}
+          </div>
+        </article>
+      `;
+    }
+
+    // ---------------------------------------------------------------------------
+    // Regular Month Cards
+    // ---------------------------------------------------------------------------
+
+    function renderMonthCard(month) {
+      const id = `month-${month.key}`;
+      const companiesList = [...month.companies].join(' & ');
+
+      return `
+        <article class="release-card">
+          <div class="release-card-header">
+            <div class="release-title">${month.label}</div>
+            <span style="font-size:0.8rem;color:var(--color-text-muted)">${companiesList}</span>
+          </div>
+
+          <div class="release-meta">
+            <span>${month.totalIssues} issues across ${month.projects.length} projects</span>
+          </div>
+
+          <div class="release-issues">
+            <button class="issues-toggle" onclick="toggleIssues('${id}')">
+              View features ▾
+            </button>
+            <div class="issues-list" id="${id}">
+              ${renderEpicView(month.projects, id, 'all')}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    // ---------------------------------------------------------------------------
+    // Epic Grouping
+    // ---------------------------------------------------------------------------
+
+    function renderEpicView(projects, cardId, companyFilter) {
+      const filteredProjects = companyFilter === 'all'
+        ? projects
+        : projects.filter(p => p.companyName === companyFilter);
+
+      // Collect all issues, group by epic
+      const epics = {};
+      const noEpic = [];
+
+      for (const proj of filteredProjects) {
+        for (const issue of proj.issues) {
+          if (issue.epic) {
+            const epicKey = issue.epic.key;
+            if (!epics[epicKey]) {
+              epics[epicKey] = {
+                key: issue.epic.key,
+                summary: issue.epic.summary,
+                url: issue.epic.url,
+                issues: []
+              };
+            }
+            epics[epicKey].issues.push(issue);
+          } else {
+            noEpic.push(issue);
+          }
+        }
+      }
+
+      const epicGroups = Object.values(epics).sort((a, b) => b.issues.length - a.issues.length);
+
+      if (epicGroups.length === 0 && noEpic.length === 0) {
+        return '<div class="empty-state" style="padding:1rem;">No items</div>';
+      }
+
+      let html = '';
+
+      for (const epic of epicGroups) {
+        const epicId = `${cardId}-epic-${epic.key}`;
+        html += `
+          <div class="epic-group">
+            <div class="epic-header" onclick="toggleIssues('${epicId}')">
+              <a class="epic-link" href="${epic.url}" target="_blank" rel="noopener" onclick="event.stopPropagation();">${escapeHtml(epic.summary)}</a>
+              <span class="epic-count">${epic.issues.length}</span>
+            </div>
+            <div class="issues-list" id="${epicId}">
+              ${epic.issues.map(issue => `
+                <div class="issue-row">
+                  <span class="issue-type issue-type-${issue.type}">${issue.type}</span>
+                  <a class="issue-key" href="${issue.url}" target="_blank" rel="noopener">${issue.key}</a>
+                  <span>${escapeHtml(issue.summary)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (noEpic.length > 0) {
+        const otherId = `${cardId}-other`;
+        html += `
+          <div class="epic-group">
+            <div class="epic-header" onclick="toggleIssues('${otherId}')">
+              <span class="epic-link" style="color:var(--color-text-muted);">Other items</span>
+              <span class="epic-count">${noEpic.length}</span>
+            </div>
+            <div class="issues-list" id="${otherId}">
+              ${noEpic.map(issue => `
+                <div class="issue-row">
+                  <span class="issue-type issue-type-${issue.type}">${issue.type}</span>
+                  <a class="issue-key" href="${issue.url}" target="_blank" rel="noopener">${issue.key}</a>
+                  <span>${escapeHtml(issue.summary)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      return html;
+    }
+
+    // ---------------------------------------------------------------------------
+    // Interactions
+    // ---------------------------------------------------------------------------
+
+    function toggleIssues(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('open');
+    }
+
+    function switchTab(btn) {
+      const cardId = btn.dataset.card;
+      const companyFilter = btn.dataset.tab;
+
+      // Update active tab
+      btn.parentElement.querySelectorAll('.company-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Rebuild the filtered release list
+      const filtered = activeFilter === 'all'
+        ? releases
+        : releases.filter(r => r.company === activeFilter);
+
+      const now = new Date();
+      const fifteenDaysAgo = new Date(now);
+      fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15);
+      const fifteenDaysAhead = new Date(now);
+      fifteenDaysAhead.setDate(fifteenDaysAhead.getDate() + 15);
+
+      let relevantReleases;
+      if (cardId === 'spotlight-shipped') {
+        relevantReleases = filtered.filter(r => {
+          if (r.status !== 'published' || !r.releaseDate) return false;
+          const d = new Date(r.releaseDate + 'T00:00:00');
+          return d >= fifteenDaysAgo && d <= now;
+        });
+      } else {
+        relevantReleases = filtered.filter(r => {
+          if (r.status !== 'upcoming' || !r.releaseDate) return false;
+          const d = new Date(r.releaseDate + 'T00:00:00');
+          return d > now && d <= fifteenDaysAhead;
+        });
+      }
+
+      // Build projects from relevant releases
+      const projects = [];
+      for (const release of relevantReleases) {
+        if (!release.issues || release.issues.length === 0) continue;
+        projects.push({
+          project: release.project,
+          company: release.company,
+          companyName: release.companyName,
+          issues: release.issues || []
+        });
+      }
+
+      const contentEl = document.getElementById(`${cardId}-content`);
+      if (contentEl) {
+        contentEl.innerHTML = renderEpicView(projects, cardId, companyFilter);
+      }
+    }
+
+    function openEmbed(event) {
+      event.preventDefault();
+      const target = event.currentTarget;
+      const embedUrl = target.dataset.embedUrl;
+      const title = target.dataset.embedTitle;
+
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML =
+        `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+      document.getElementById('embedModal').classList.add('open');
+    }
+
+    document.getElementById('modalClose').addEventListener('click', () => {
+      document.getElementById('embedModal').classList.remove('open');
+      document.getElementById('modalBody').innerHTML = '';
+    });
+
+    document.getElementById('embedModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        document.getElementById('embedModal').classList.remove('open');
+        document.getElementById('modalBody').innerHTML = '';
+      }
+    });
+
+    // Header filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    // ---------------------------------------------------------------------------
+    // Utilities
+    // ---------------------------------------------------------------------------
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+               .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function escapeAttr(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+               .replace(/'/g, '&#39;').replace(/</g, '&lt;');
+    }
+
+    // ---------------------------------------------------------------------------
+    // Init
+    // ---------------------------------------------------------------------------
+
+    loadReleases();
+  </script>
+</body>
+</html>

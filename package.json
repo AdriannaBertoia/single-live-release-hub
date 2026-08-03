@@ -1,0 +1,23 @@
+{
+  "name": "single-live-release-hub",
+  "version": "1.0.0",
+  "description": "A single source of truth for release tracking with monthly executive digest notifications",
+  "main": "src/generate-digest.js",
+  "scripts": {
+    "serve": "npx serve public",
+    "sync": "node src/jira-sync.js && cp data/releases.json public/data/releases.json",
+    "sync:dry": "node src/jira-sync.js --dry-run",
+    "digest": "node src/generate-digest.js",
+    "digest:preview": "node src/generate-digest.js --preview",
+    "validate": "node src/validate-releases.js"
+  },
+  "keywords": ["releases", "changelog", "digest", "notifications"],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "16.4.7",
+    "handlebars": "4.7.8"
+  },
+  "devDependencies": {
+    "serve": "14.2.4"
+  }
+}
