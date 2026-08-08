@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's New — Release Notes</title>
+  <style>
+    :root {
+      --color-bg: #f8f9fa;
+      --color-surface: #ffffff;
+      --color-border: #e2e8f0;
+      --color-text: #1a202c;
+      --color-text-muted: #64748b;
+      --color-accent: #4f46e5;
+      --color-el: #6366f1;
+      --color-laz: #f59e0b;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.7;
+    }
+    .header {
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+    .header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.9rem; }
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .view-tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 2rem;
+      padding: 0.25rem;
+      background: var(--color-surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--color-border);
+      width: fit-content;
+    }
+    .view-tab {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--color-text-muted);
+    }
+    .view-tab:hover { color: var(--color-text); }
+    .view-tab.active { background: var(--color-accent); color: white; }
+    .month-section { margin-bottom: 3rem; }
+    .month-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--color-accent);
+    }
+    .company-label {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1rem;
+      margin-top: 1rem;
+    }
+    .company-label-el { background: var(--color-el); }
+    .company-label-laz { background: var(--color-laz); }
+    .note-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .note-headline {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .note-description {
+      font-size: 0.9rem;
+      color: var(--color-text);
+      margin-bottom: 0.4rem;
+    }
+    .note-value {
+      font-size: 0.85rem;
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+    .note-type {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    .note-type-feature { background: #dbeafe; color: #1e40af; }
+    .note-type-improvement { background: #d1fae5; color: #065f46; }
+    .note-type-bug { background: #fee2e2; color: #991b1b; }
+    .note-type-infrastructure { background: #f3e8ff; color: #5b21b6; }
+    .company-section { margin-bottom: 2rem; }
+    .hidden { display: none; }
+    .footer-note { font-size: 0.75rem; color: var(--color-text-muted); text-align: center; margin-top: 3rem; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>What's New</h1>
+    <p>Product updates for marketing and customer-facing teams</p>
+  </div>
+  <div class="container">
+    <div class="view-tabs">
+      <button class="view-tab active" onclick="switchView('all')">All</button>
+      <button class="view-tab" onclick="switchView('Explore Learning')">Explore Learning</button>
+      <button class="view-tab" onclick="switchView('Learning A-Z')">Learning A-Z</button>
+    </div>
+
+    <!-- ═══════════════════════ AUGUST 2026 ═══════════════════════ -->
+    <section class="month-section">
+      <h2 class="month-title">August 2026 Release</h2>
+
+      <div class="company-section" data-company="Learning A-Z">
+        <span class="company-label company-label-laz">Learning A-Z</span>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Smarter Student Reading Levels
+          </div>
+          <p class="note-description">Students now experience an enhanced Reading Power Zone that better adapts to their individual reading level, surfacing the right content at the right time.</p>
+          <p class="note-value">This means students spend less time searching and more time reading books that match their ability — building confidence and fluency faster.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Improved Assessments and Placement
+          </div>
+          <p class="note-description">The student assessment and placement experience has been redesigned for clarity and accuracy, helping teachers identify the right starting level for each student.</p>
+          <p class="note-value">This means less guesswork when onboarding new students — they get matched to appropriate content from day one.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Updated Curriculum Alignment
+          </div>
+          <p class="note-description">Content has been updated to align with the latest Science of Reading standards, with outdated materials phased out in favor of evidence-based resources.</p>
+          <p class="note-value">This means teachers can trust that the resources they assign are aligned to current best practices and state requirements.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            New Engagement Activities for Students
+          </div>
+          <p class="note-description">New interactive activities have been added to keep students engaged between reading sessions, reinforcing comprehension and vocabulary skills.</p>
+          <p class="note-value">This means more variety in the student experience, reducing fatigue and keeping learners motivated throughout the school day.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Better Reporting for Teachers
+          </div>
+          <p class="note-description">Reports have been updated to give teachers clearer, more actionable insights into student progress and reading activity.</p>
+          <p class="note-value">This means teachers can quickly spot students who need extra support without digging through complex data.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Unified Navigation Across Products
+          </div>
+          <p class="note-description">The top navigation bar has been updated to provide a consistent experience when moving between ExploreK12 products.</p>
+          <p class="note-value">This means less confusion for teachers and admins who use multiple tools — everything is easy to find in one place.</p>
+        </div>
+      </div>
+
+      <div class="company-section" data-company="Explore Learning">
+        <span class="company-label company-label-el">Explore Learning</span>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Keyboard-Accessible Science Simulations
+          </div>
+          <p class="note-description">Drag-and-drop interactions within Gizmo simulations can now be completed using keyboard navigation, making science exploration accessible to all learners.</p>
+          <p class="note-value">This means students using assistive technology or keyboard-only navigation can fully participate in hands-on science activities.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Easier Username Recovery
+          </div>
+          <p class="note-description">Students and teachers can now discover their username through the password recovery process, eliminating a common support request.</p>
+          <p class="note-value">This means fewer help desk tickets and less class time lost to login issues.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Improved ClassLink Single Sign-On
+          </div>
+          <p class="note-description">The ClassLink SSO integration has been enhanced for smoother authentication, reducing login errors for districts using ClassLink.</p>
+          <p class="note-value">This means students and teachers in ClassLink districts get into their accounts faster with fewer login failures.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Faster Page Loads and Responsiveness
+          </div>
+          <p class="note-description">Significant performance improvements across the platform mean pages load faster and interactions feel more responsive, especially on slower connections.</p>
+          <p class="note-value">This means less waiting for teachers and students — particularly in classrooms with limited bandwidth.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Streamlined Support Experience
+          </div>
+          <p class="note-description">All support forms now use Intercom, providing a consistent and faster way to get help directly within the product.</p>
+          <p class="note-value">This means teachers can reach support without leaving their workflow — questions get answered faster.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════ JULY 2026 ═══════════════════════ -->
+    <section class="month-section">
+      <h2 class="month-title">July 2026 Release</h2>
+
+      <div class="company-section" data-company="Explore Learning">
+        <span class="company-label company-label-el">Explore Learning</span>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Teacher Preview Mode for Investigations
+          </div>
+          <p class="note-description">Teachers can now preview Investigations in a skip-through mode, quickly scanning activity content before assigning it to students.</p>
+          <p class="note-value">This means teachers can prep lessons faster by reviewing what students will see without completing every step themselves.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Enhanced Accessibility for Investigations
+          </div>
+          <p class="note-description">Investigations have been updated with accessibility improvements to better support all learners, including those using screen readers.</p>
+          <p class="note-value">This means more students can independently engage with science investigations regardless of their abilities.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Improved Scoring Insights with Heatmaps
+          </div>
+          <p class="note-description">The Investigations heatmap now supports holistic scoring, giving teachers a more complete visual picture of class performance at a glance.</p>
+          <p class="note-value">This means teachers can identify patterns and struggling students faster without reading individual reports.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-bug">bug fix</span>
+            Ozone Alert! Simulation Fixes
+          </div>
+          <p class="note-description">Several issues in the Ozone Alert! Gizmo have been resolved, ensuring the simulation runs correctly for all students.</p>
+          <p class="note-value">This means no more interruptions when students are working through this popular earth science activity.</p>
+        </div>
+      </div>
+
+      <div class="company-section" data-company="Learning A-Z">
+        <span class="company-label company-label-laz">Learning A-Z</span>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Automated Sales-to-Success Handoff
+          </div>
+          <p class="note-description">New automation ensures customer accounts are seamlessly transitioned from the sales team to the success team with all context preserved.</p>
+          <p class="note-value">This means new customers get faster onboarding support without details falling through the cracks between teams.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-feature">feature</span>
+            Professional Learning Request Management
+          </div>
+          <p class="note-description">A new intake and request management system for Professional Learning Services makes it easier for districts to schedule and track PD sessions.</p>
+          <p class="note-value">This means district coordinators spend less time on back-and-forth emails and can self-serve their PD scheduling needs.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Enhanced Service Cloud Experience
+          </div>
+          <p class="note-description">Core support infrastructure has been upgraded to handle cases more efficiently, with better routing and faster response times.</p>
+          <p class="note-value">This means customer questions and issues get resolved faster with less back-and-forth.</p>
+        </div>
+
+        <div class="note-card">
+          <div class="note-headline">
+            <span class="note-type note-type-improvement">improvement</span>
+            Intercom + Salesforce Integration
+          </div>
+          <p class="note-description">In-app support conversations now sync directly with the customer record in Salesforce, giving support teams full context on every interaction.</p>
+          <p class="note-value">This means support reps can see the full customer history without switching tools, leading to faster resolutions.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer-note">Last updated: August 3, 2026. Notes are generated from Jira release data.</p>
+  </div>
+
+  <script>
+    function switchView(company) {
+      document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      document.querySelectorAll('.company-section').forEach(section => {
+        if (company === 'all') {
+          section.classList.remove('hidden');
+        } else {
+          section.classList.toggle('hidden', section.dataset.company !== company);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

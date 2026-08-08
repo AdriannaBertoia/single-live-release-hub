@@ -7,6 +7,8 @@
     "serve": "npx serve public",
     "sync": "node src/jira-sync.js && cp data/releases.json public/data/releases.json",
     "sync:dry": "node src/jira-sync.js --dry-run",
+    "notes": "node src/generate-release-notes.js",
+    "notes:all": "node src/generate-release-notes.js --all",
     "digest": "node src/generate-digest.js",
     "digest:preview": "node src/generate-digest.js --preview",
     "validate": "node src/validate-releases.js"
