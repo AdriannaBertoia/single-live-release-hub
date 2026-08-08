@@ -26,8 +26,8 @@ const SAMPLE_DATA_PATH = path.join(__dirname, '..', 'data', 'releases.sample.jso
 const OUTPUT_DIR = path.join(__dirname, '..', 'public', 'release-notes');
 const NOTES_CACHE_PATH = path.join(__dirname, '..', 'data', 'release-notes-cache.json');
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.1-8b-instant';
 
 // ---------------------------------------------------------------------------
 // CLI Args
@@ -112,7 +112,7 @@ function groupByMonth(releases) {
 // ---------------------------------------------------------------------------
 
 async function generateValueAdd(epicSummary, issues, company) {
-  if (!GEMINI_API_KEY) {
+  if (!GROQ_API_KEY) {
     return {
       headline: epicSummary,
       description: `Includes ${issues.length} improvement${issues.length !== 1 ? 's' : ''} to ${epicSummary.toLowerCase()}.`,
@@ -145,27 +145,28 @@ Rules:
 - Return ONLY valid JSON, nothing else`;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-    const response = await fetch(url, {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.7,
-          responseMimeType: 'application/json'
-        }
+        model: GROQ_MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        response_format: { type: 'json_object' }
       })
     });
 
     if (!response.ok) {
       const text = await response.text();
-      console.error(`    ⚠ Gemini error: ${response.status} ${text}`);
+      console.error(`    ⚠ Groq error: ${response.status} ${text}`);
       return { headline: epicSummary, description: '', valueAdd: '' };
     }
 
     const data = await response.json();
-    const content = data.candidates[0].content.parts[0].text;
+    const content = data.choices[0].message.content;
     return JSON.parse(content);
   } catch (err) {
     console.error(`    ⚠ AI generation failed for "${epicSummary}": ${err.message}`);
@@ -174,7 +175,7 @@ Rules:
 }
 
 async function generateStandaloneNotes(issues, company) {
-  if (!GEMINI_API_KEY || issues.length === 0) {
+  if (!GROQ_API_KEY || issues.length === 0) {
     return issues.map(i => ({
       headline: i.summary,
       description: '',
@@ -191,34 +192,35 @@ Given these individual tickets from a software release that don't belong to a la
 Tickets:
 ${issueList}
 
-Write a JSON array with one object per ticket in this format:
-[
+Write a JSON object with an "items" array, one object per ticket:
+{"items": [
   {
     "original": "the original ticket summary",
     "headline": "Short benefit-focused headline (max 8 words)",
     "description": "One sentence explaining the benefit for teachers/students/admins.",
     "type": "bug|feature|improvement|task"
   }
-]
+]}
 
 Rules:
 - For bug fixes, frame as "Fixed: [what was wrong]" or "Resolved: [issue]"
 - For features, focus on what users can now do
-- Skip internal/technical items that don't affect end users (return null for those)
+- Skip internal/technical items that don't affect end users (set headline to null for those)
 - Write for teachers, school administrators, and district leaders
-- Return ONLY a valid JSON array, nothing else`;
+- Return ONLY valid JSON`;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
-    const response = await fetch(url, {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Authorization': `Bearer ${GROQ_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.7,
-          responseMimeType: 'application/json'
-        }
+        model: GROQ_MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.7,
+        response_format: { type: 'json_object' }
       })
     });
 
@@ -227,9 +229,9 @@ Rules:
     }
 
     const data = await response.json();
-    const content = JSON.parse(data.candidates[0].content.parts[0].text);
+    const content = JSON.parse(data.choices[0].message.content);
     const items = Array.isArray(content) ? content : (content.items || content.notes || []);
-    return items.filter(i => i !== null);
+    return items.filter(i => i !== null && i.headline !== null);
   } catch (err) {
     console.error(`    ⚠ AI generation failed for standalone items: ${err.message}`);
     return issues.map(i => ({ headline: i.summary, description: '', valueAdd: '', type: i.type }));
@@ -427,8 +429,8 @@ async function main() {
   console.log(' Release Notes Generator (AI-Powered)');
   console.log('═══════════════════════════════════════════\n');
 
-  if (!GEMINI_API_KEY) {
-    console.log('⚠ No GEMINI_API_KEY set. Will use raw ticket summaries as fallback.\n');
+  if (!GROQ_API_KEY) {
+    console.log('⚠ No GROQ_API_KEY set. Will use raw ticket summaries as fallback.\n');
   }
 
   const data = loadReleases();
